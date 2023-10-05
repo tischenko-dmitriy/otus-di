@@ -58,7 +58,7 @@ class ApplicationTest {
         var fields = Arrays.stream(component.getClass().getDeclaredFields())
                 .filter(f -> !Modifier.isStatic(f.getModifiers()))
                 .peek(f -> f.setAccessible(true))
-                .collect(Collectors.toList());
+                .toList();
 
         for (var field: fields){
             var fieldValue = field.get(component);
