@@ -1,4 +1,4 @@
-package ru.otus.services;
+package ru.otus.example.di.services;
 
 import java.io.InputStream;
 import java.io.PrintStream;

@@ -1,4 +1,4 @@
-package ru.otus.model;
+package ru.otus.example.di.model;
 
 public abstract class Equation {
     protected final int leftPart;

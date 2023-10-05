@@ -4,11 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import ru.otus.appcontainer.AppComponentsContainerImpl;
-import ru.otus.appcontainer.api.AppComponent;
-import ru.otus.appcontainer.api.AppComponentsContainerConfig;
-import ru.otus.config.AppConfig;
-import ru.otus.services.*;
+import ru.otus.example.di.appcontainer.AppComponentsContainerImpl;
+import ru.otus.example.di.appcontainer.api.AppComponent;
+import ru.otus.example.di.appcontainer.api.AppComponentsContainerConfig;
+import ru.otus.example.di.config.AppConfig;
+import ru.otus.example.di.services.*;
 
 import java.io.PrintStream;
 import java.lang.reflect.Modifier;
@@ -19,25 +19,25 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-class AppTest {
+class ApplicationTest {
 
     @DisplayName("Из контекста тремя способами должен корректно доставаться компонент с проставленными полями")
     @ParameterizedTest(name = "Достаем по: {0}")
-    @CsvSource(value = {"GameProcessor, ru.otus.services.GameProcessor",
-            "GameProcessorImpl, ru.otus.services.GameProcessor",
-            "gameProcessor, ru.otus.services.GameProcessor",
+    @CsvSource(value = {"GameProcessor, ru.otus.example.di.services.GameProcessor",
+            "GameProcessorImpl, ru.otus.example.di.services.GameProcessor",
+            "gameProcessor, ru.otus.example.di.services.GameProcessor",
 
-            "IOService, ru.otus.services.IOService",
-            "IOServiceStreams, ru.otus.services.IOService",
-            "ioService, ru.otus.services.IOService",
+            "IOService, ru.otus.example.di.services.IOService",
+            "IOServiceStreams, ru.otus.example.di.services.IOService",
+            "ioService, ru.otus.example.di.services.IOService",
 
-            "PlayerService, ru.otus.services.PlayerService",
-            "PlayerServiceImpl, ru.otus.services.PlayerService",
-            "playerService, ru.otus.services.PlayerService",
+            "PlayerService, ru.otus.example.di.services.PlayerService",
+            "PlayerServiceImpl, ru.otus.example.di.services.PlayerService",
+            "playerService, ru.otus.example.di.services.PlayerService",
 
-            "EquationPreparer, ru.otus.services.EquationPreparer",
-            "EquationPreparerImpl, ru.otus.services.EquationPreparer",
-            "equationPreparer, ru.otus.services.EquationPreparer"
+            "EquationPreparer, ru.otus.example.di.services.EquationPreparer",
+            "EquationPreparerImpl, ru.otus.example.di.services.EquationPreparer",
+            "equationPreparer, ru.otus.example.di.services.EquationPreparer"
     })
     public void shouldExtractFromContextCorrectComponentWithNotNullFields(String classNameOrBeanId, Class<?> rootClass) throws Exception {
         var ctx = new AppComponentsContainerImpl(AppConfig.class);
@@ -45,7 +45,7 @@ class AppTest {
         assertThat(classNameOrBeanId).isNotEmpty();
         Object component;
         if (classNameOrBeanId.charAt(0) == classNameOrBeanId.toUpperCase().charAt(0)) {
-            Class<?> gameProcessorClass = Class.forName("ru.otus.services." + classNameOrBeanId);
+            Class<?> gameProcessorClass = Class.forName("ru.otus.example.di.services." + classNameOrBeanId);
             assertThat(rootClass).isAssignableFrom(gameProcessorClass);
 
             component = ctx.getAppComponent(gameProcessorClass);

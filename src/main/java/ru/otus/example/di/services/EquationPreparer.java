@@ -1,6 +1,6 @@
-package ru.otus.services;
+package ru.otus.example.di.services;
 
-import ru.otus.model.Equation;
+import ru.otus.example.di.model.Equation;
 
 import java.util.List;
 

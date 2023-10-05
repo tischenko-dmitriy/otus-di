@@ -1,4 +1,4 @@
-package ru.otus.model;
+package ru.otus.example.di.model;
 
 public class DivisionEquation extends Equation {
 

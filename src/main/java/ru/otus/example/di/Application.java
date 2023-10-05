@@ -1,14 +1,13 @@
-package ru.otus;
+package ru.otus.example.di;
 
-import ru.otus.appcontainer.AppComponentsContainerImpl;
-import ru.otus.appcontainer.api.AppComponentsContainer;
-import ru.otus.config.AppConfig;
-import ru.otus.services.GameProcessor;
-import ru.otus.services.GameProcessorImpl;
+import ru.otus.example.di.appcontainer.AppComponentsContainerImpl;
+import ru.otus.example.di.appcontainer.api.AppComponentsContainer;
+import ru.otus.example.di.config.AppConfig;
+import ru.otus.example.di.services.GameProcessor;
 
 /*
-В классе AppComponentsContainerImpl реализовать обработку, полученной в конструкторе конфигурации,
-основываясь на разметке аннотациями из пакета appcontainer. Так же необходимо реализовать методы getAppComponent.
+В классе AppComponentsContainerImpl реализовать обработку конфигурации, полученной в конструкторе,
+основываясь на разметке аннотациями из пакета appcontainer. Также необходимо реализовать методы getAppComponent.
 В итоге должно получиться работающее приложение. Менять можно только класс AppComponentsContainerImpl.
 Можно добавлять свои исключения.
 
@@ -20,14 +19,14 @@ import ru.otus.services.GameProcessorImpl;
 PS Приложение представляет собой тренажер таблицы умножения
 */
 
-public class App {
+public class Application {
 
     public static void main(String[] args) throws Exception {
         // Опциональные варианты
         //AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig1.class, AppConfig2.class);
 
         // Тут можно использовать библиотеку Reflections (см. зависимости)
-        //AppComponentsContainer container = new AppComponentsContainerImpl("ru.otus.config");
+        //AppComponentsContainer container = new AppComponentsContainerImpl("ru.otus.example.di.config");
 
         // Обязательный вариант
         AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);

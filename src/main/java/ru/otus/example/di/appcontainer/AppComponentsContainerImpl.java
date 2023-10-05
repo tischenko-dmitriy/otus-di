@@ -1,7 +1,7 @@
-package ru.otus.appcontainer;
+package ru.otus.example.di.appcontainer;
 
-import ru.otus.appcontainer.api.AppComponentsContainer;
-import ru.otus.appcontainer.api.AppComponentsContainerConfig;
+import ru.otus.example.di.appcontainer.api.AppComponentsContainer;
+import ru.otus.example.di.appcontainer.api.AppComponentsContainerConfig;
 
 import java.util.*;
 
