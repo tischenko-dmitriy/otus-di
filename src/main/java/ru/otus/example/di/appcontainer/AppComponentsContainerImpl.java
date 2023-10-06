@@ -57,9 +57,9 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     @SuppressWarnings("unchecked")
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
-        List<Object> components =  appComponents
+        List<Object> components = appComponents
                 .stream()
-                .filter(i -> componentClass.getName().equals(i.getClass().getName()))
+                .filter(i -> ((Method) i).getReturnType().getName().equals(componentClass.getName()))
                 .toList();
 
         if (components.size() == 0) {
