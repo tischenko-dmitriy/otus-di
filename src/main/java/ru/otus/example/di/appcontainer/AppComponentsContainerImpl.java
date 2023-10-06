@@ -28,15 +28,20 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                 .filter(m -> m.isAnnotationPresent(AppComponent.class))
                 .collect(Collectors.toList());
 
-        for (int i = 0; i < components.size() - 1; i++) {
-            int order = ((Method) components.get(i)).getAnnotation(AppComponent.class).order();
-            String name = ((Method) components.get(i)).getAnnotation(AppComponent.class).name();
-            if (order != i) {
-                continue;
-            }
+        Map<String, Object> sorted = new HashMap<>();
+        components.forEach(i -> sorted.put(i.getClass().getName(), i));
 
-            appComponents.add(components.get(i));
-            appComponentsByName.put(name, components.get(i));
+        for (int i = 0; i < components.size() - 1; i++) {
+            for (Object component : components) {
+                if ( ((Method) component).isAnnotationPresent(AppComponent.class) ) {
+                    if ( ((Method) component).getAnnotation(AppComponent.class).order() == i ) {
+                        appComponentsByName.put(component.getClass().getName(), component);
+                        appComponents.add(component);
+                    }
+
+                }
+
+            }
 
         }
 
