@@ -59,7 +59,9 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     public <C> C getAppComponent(Class<C> componentClass) {
         List<Object> components = appComponents
                 .stream()
-                .filter(i -> ((Method) i).getReturnType().getName().equals(componentClass.getName()))
+                .filter(m -> ( (((Method) m).getReturnType().getName().equals(componentClass.getName())) ||
+                        (componentImplementsInterface(componentClass, ((Method) m).getReturnType().getName())) )
+                )
                 .toList();
 
         if (components.size() == 0) {
@@ -78,4 +80,12 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
         return (C) appComponentsByName.get(componentName);
     }
+
+    private boolean componentImplementsInterface(Class component, String interfaceName) {
+        List<Class> interfaces = Arrays.stream(component.getInterfaces()).toList();
+        List<String> interfaceNames = new ArrayList<>();
+        interfaces.forEach(i -> interfaceNames.add(i.getName()));
+        return interfaceNames.contains(interfaceName);
+    }
+
 }
