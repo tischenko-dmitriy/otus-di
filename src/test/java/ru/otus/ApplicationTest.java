@@ -14,7 +14,6 @@ import java.io.PrintStream;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -35,9 +34,9 @@ class ApplicationTest {
             "PlayerServiceImpl, ru.otus.example.di.services.PlayerService",
             "playerService, ru.otus.example.di.services.PlayerService",
 
-            "EquationPreparer, ru.otus.example.di.services.EquationPreparer",
+            "EquationPreparer,     ru.otus.example.di.services.EquationPreparer",
             "EquationPreparerImpl, ru.otus.example.di.services.EquationPreparer",
-            "equationPreparer, ru.otus.example.di.services.EquationPreparer"
+            "equationPreparer,     ru.otus.example.di.services.EquationPreparer"
     })
     public void shouldExtractFromContextCorrectComponentWithNotNullFields(String classNameOrBeanId, Class<?> rootClass) throws Exception {
         var ctx = new AppComponentsContainerImpl(AppConfig.class);
