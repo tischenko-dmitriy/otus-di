@@ -81,6 +81,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                     break;
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
+
                 }
             }
             return component;
