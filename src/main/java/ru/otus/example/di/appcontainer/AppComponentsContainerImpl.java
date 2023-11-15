@@ -42,12 +42,17 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                         Class<?> componentClass = ((Method) component).getReturnType();
                         Set<Class<?>> subClasses = new HashSet<>();
                         if (componentClass.isInterface()) {
+                            String beanName = String.format("%s%s",
+                                    componentClass.getSimpleName().substring(0, 1).toLowerCase(),
+                                    componentClass.getSimpleName().substring(1));
+                            appComponentsByName.put(beanName, componentClass);
                             appComponentsByName.put(componentClass.getName(), componentClass);
                             appComponents.add(componentClass);
                             subClasses = reflections.get(SubTypes.of(componentClass).asClass());
                         } else {
                             subClasses.add(componentClass);
                         }
+
                         subClasses.forEach((subClass) -> {
                             appComponentsByName.put(subClass.getName(), subClass);
                             appComponents.add(subClass);
@@ -77,16 +82,8 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         if (appComponents.contains(componentClass)) {
             String className = ((Class<C>) appComponents.get(appComponents.indexOf(componentClass))).getName();
             component = (Class<C>) appComponents.get(appComponents.indexOf(componentClass));
-/*
-            try {
-                String className = ((Class<C>) appComponents.get(appComponents.indexOf(componentClass))).getName();
-                component = (C) appComponents.get(appComponents.indexOf(componentClass));
-//                component = (C) ClassLoader.getSystemClassLoader().loadClass(className);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-*/
             return (C) component;
+
         } else if (componentClass.getInterfaces().length != 0) {
             List<Class<?>> interfaces = Stream.of(componentClass.getInterfaces()).toList();
             for (Class<?> cls : interfaces) {
@@ -99,6 +96,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
                 }
             }
+
             return (C) component;
         } else {
             throw new NoSuchClassException(componentClass.getName());
@@ -112,13 +110,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
             throw new ComponentNotFoundException(componentName);
         }
 
-        Object component;
-        try {
-            String className = ((Class<C>) appComponentsByName.get(componentName)).getName();
-            component = Class.forName(className).newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        C component = (C) appComponentsByName.get(componentName);
 
         return (C) component;
     }
