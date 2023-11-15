@@ -1,5 +1,6 @@
 package ru.otus.example.di.appcontainer;
 
+import org.reflections.Reflections;
 import ru.otus.example.di.appcontainer.api.AppComponent;
 import ru.otus.example.di.appcontainer.api.AppComponentsContainer;
 import ru.otus.example.di.appcontainer.api.AppComponentsContainerConfig;
@@ -10,6 +11,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.reflections.scanners.Scanners.SubTypes;
 
 public class AppComponentsContainerImpl implements AppComponentsContainer {
 
@@ -31,18 +34,25 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         Map<String, Object> sorted = new HashMap<>();
         components.forEach(i -> sorted.put(i.getClass().getName(), i));
 
+        Reflections reflections = new Reflections("ru.otus.example.di");
         for (int i = 0; i < components.size() - 1; i++) {
             for (Object component : components) {
                 if ( ((Method) component).isAnnotationPresent(AppComponent.class) ) {
                     if ( ((Method) component).getAnnotation(AppComponent.class).order() == i ) {
-                        Class<?> componentClass;
-                        try {
-                            componentClass = Class.forName(((Method) component).getReturnType().getName());
-                        } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
+                        Class<?> componentClass = ((Method) component).getReturnType();
+                        Set<Class<?>> subClasses = new HashSet<>();
+                        if (componentClass.isInterface()) {
+                            appComponentsByName.put(componentClass.getName(), componentClass);
+                            appComponents.add(componentClass);
+                            subClasses = reflections.get(SubTypes.of(componentClass).asClass());
+                        } else {
+                            subClasses.add(componentClass);
                         }
-                        appComponentsByName.put(((Method) component).getAnnotation(AppComponent.class).name(), componentClass);
-                        appComponents.add(componentClass);
+                        subClasses.forEach((subClass) -> {
+                            appComponentsByName.put(subClass.getName(), subClass);
+                            appComponents.add(subClass);
+                        });
+
                     }
 
                 }
@@ -63,28 +73,33 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     @SuppressWarnings("unchecked")
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
-        C component = null;
+        Class<C> component = null;
         if (appComponents.contains(componentClass)) {
+            String className = ((Class<C>) appComponents.get(appComponents.indexOf(componentClass))).getName();
+            component = (Class<C>) appComponents.get(appComponents.indexOf(componentClass));
+/*
             try {
                 String className = ((Class<C>) appComponents.get(appComponents.indexOf(componentClass))).getName();
-                component = (C) Class.forName(className);
+                component = (C) appComponents.get(appComponents.indexOf(componentClass));
+//                component = (C) ClassLoader.getSystemClassLoader().loadClass(className);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-            return component;
+*/
+            return (C) component;
         } else if (componentClass.getInterfaces().length != 0) {
             List<Class<?>> interfaces = Stream.of(componentClass.getInterfaces()).toList();
             for (Class<?> cls : interfaces) {
                 try {
                     String className = ((Class<C>) appComponents.get(appComponents.indexOf(cls))).getName();
-                    component = (C) Class.forName(className);
+                    component = (Class<C>) Class.forName(className);
                     break;
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
 
                 }
             }
-            return component;
+            return (C) component;
         } else {
             throw new NoSuchClassException(componentClass.getName());
         }

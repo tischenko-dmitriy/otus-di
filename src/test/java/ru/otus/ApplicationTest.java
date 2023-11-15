@@ -52,9 +52,15 @@ class ApplicationTest {
             component = ctx.getAppComponent(classNameOrBeanId);
         }
         assertThat(component).isNotNull();
-        assertThat(rootClass).isAssignableFrom(component.getClass());
 
-        var fields = Arrays.stream(component.getClass().getDeclaredFields())
+        System.out.printf("Class %s %s from %s.\n",
+                rootClass.getName(),
+                (rootClass.isAssignableFrom((Class) component) ? "is assignable from" : "isn't assignable from"),
+                ((Class) component).getName());
+
+        assertThat(rootClass).isAssignableFrom((Class) component);
+
+        var fields = Arrays.stream(((Class) component).getDeclaredFields())
                 .filter(f -> !Modifier.isStatic(f.getModifiers()))
                 .peek(f -> f.setAccessible(true))
                 .toList();
