@@ -1,4 +1,4 @@
-package ru.otus.example.di.services;
+package ru.otus.services;
 
 public interface GameProcessor {
     void startGame();

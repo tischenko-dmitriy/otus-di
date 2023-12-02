@@ -1,4 +1,4 @@
-package ru.otus.example.di.model;
+package ru.otus.model;
 
 public class Player {
     private final String name;

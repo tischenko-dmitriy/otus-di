@@ -1,6 +1,6 @@
-package ru.otus.example.di.services;
+package ru.otus.services;
 
-import ru.otus.example.di.model.Player;
+import ru.otus.model.Player;
 
 public class PlayerServiceImpl implements PlayerService {
 

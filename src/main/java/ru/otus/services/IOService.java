@@ -1,4 +1,4 @@
-package ru.otus.example.di.services;
+package ru.otus.services;
 
 public interface IOService {
     void out(String message);

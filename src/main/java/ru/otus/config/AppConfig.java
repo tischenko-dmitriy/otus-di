@@ -1,8 +1,8 @@
-package ru.otus.example.di.config;
+package ru.otus.config;
 
-import ru.otus.example.di.appcontainer.api.AppComponent;
-import ru.otus.example.di.appcontainer.api.AppComponentsContainerConfig;
-import ru.otus.example.di.services.*;
+import ru.otus.appcontainer.api.AppComponent;
+import ru.otus.appcontainer.api.AppComponentsContainerConfig;
+import ru.otus.services.*;
 
 @AppComponentsContainerConfig(order = 1)
 public class AppConfig {
